@@ -48,7 +48,7 @@ public class UDPClient {
 			sendSoc = new DatagramSocket();
 		} catch (SocketException e) {
 			System.out.println("SocketException: " + e);
-			System.exit(-1);
+			System.exit(-1); 
 		}
 	}
 
@@ -61,6 +61,7 @@ public class UDPClient {
 			msg[1] = (byte)(countTo & 0x000000FF);
 			msg[0] = (byte)((countTo >> 8) & 0x000000FF);
 			send(msg, serverAddr, recvPort);
+			try{Thread.sleep(10);}catch(InterruptedException ex){}
 		}
 	}
 

@@ -6,16 +6,19 @@ package rmi;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
+
+import com.sun.org.apache.xerces.internal.util.SecurityManager;
 
 import common.*;
 
 public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 
 	private int totalMessages = -1;
-	private int[] receivedMessages;
+	private boolean[] receivedMessages;
 
 	public RMIServer() throws RemoteException {
 	}
@@ -23,11 +26,30 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 	public void receiveMessage(MessageInfo msg) throws RemoteException {
 
 		// TO-DO: On receipt of first message, initialise the receive buffer
+		if(totalMessages == -1){
+			receivedMessages = new boolean[msg.totalMessages];
+			totalMessages = msg.totalMessages;
+
+		}
 
 		// TO-DO: Log receipt of the message
+		receivedMessages[msg.messageNum] = true;
+		System.out.println(msg.messageNum);
+
 
 		// TO-DO: If this is the last expected message, then identify
 		//        any missing messages
+
+		int numRecieved = 0;
+
+		System.out.println("Messages lost:");
+		for(int count = 0; count < receivedMessages.length; ++count) {
+			if (receivedMessages[count])
+				numRecieved++;
+			else
+				System.out.println(count);
+		}
+		System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + ((double)numRecieved/(double)totalMessages)*100 + "% found.");
 
 	}
 
@@ -37,8 +59,24 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		RMIServer rmis = null;
 
 		// TO-DO: Initialise Security Manager
+		if (System.getSecurityManager() == null){
+			System.setSecurityManager(new SecurityManager());
+		}
+
 
 		// TO-DO: Instantiate the server class
+
+		try{
+			String name = "testrun";
+			rmis = new RMIServer();
+			RMIServerI stub = (RMIServerI) UnicastRemoteObject.exportObject(rmis, 0);
+			Registry registry = LocateRegistry.getRegistry();
+			registry.bind(name, stub);
+			System.err.println("Server ready.");
+		} catch (Exception e){
+			System.err.println("Server could not initialise. Error: " + e.toString());
+			e.printStackTrace();
+		}
 
 		// TO-DO: Bind to RMI registry
 

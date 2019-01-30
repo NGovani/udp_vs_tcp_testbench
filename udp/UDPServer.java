@@ -66,7 +66,7 @@ public class UDPServer {
 
 		// TO-DO: On receipt of first message, initialise the receive buffer
 		if (totalMessages == -1) {
-			totalMessages = (int)((data.getData()[0] << 8) | (data.getData()[1]));
+			totalMessages = (uint)((data.getData()[0] << 8) | (data.getData()[1]));
 			receivedMessages = new boolean[totalMessages];
 		}
 

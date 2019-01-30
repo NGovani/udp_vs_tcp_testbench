@@ -37,12 +37,12 @@ public class UDPServer {
 				recvSoc.receive(pac);
 				i = processMessage(pac);
 				System.out.println(i);
-			} catch(IOException e) {
-				System.out.println("IOException: " + e);
-				System.exit(-1);
 			} catch(SocketTimeoutException e) {
 				System.out.println("SocketTimeOut: " + e);
 				++i;
+			} catch(IOException e) {
+				System.out.println("IOException: " + e);
+				System.exit(-1);
 			}
 			if (totalMessages != -1 && i >= totalMessages)
 				close = true;		
@@ -83,8 +83,13 @@ public class UDPServer {
 		int timeOut = 5;
 
 		// TO-DO: Initialise UDP socket for receiving data
-		recvSoc = new DatagramSocket(rp);
-		recvSoc.setSoTimeout(timeOut*1000);
+		try {
+			recvSoc = new DatagramSocket(rp);
+			recvSoc.setSoTimeout(timeOut*1000);
+		} catch (SocketException e) {
+			System.out.println("SocketException: " + e);
+			exit(-1);
+		}
 
 		// Done Initialisation
 		System.out.println("UDPServer ready");

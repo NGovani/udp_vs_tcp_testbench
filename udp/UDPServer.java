@@ -88,7 +88,7 @@ public class UDPServer {
 			recvSoc.setSoTimeout(timeOut*1000);
 		} catch (SocketException e) {
 			System.out.println("SocketException: " + e);
-			exit(-1);
+			System.exit(-1);
 		}
 
 		// Done Initialisation

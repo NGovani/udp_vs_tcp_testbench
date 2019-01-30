@@ -44,7 +44,7 @@ public class UDPServer {
 				System.out.println("IOException: " + e);
 				System.exit(-1);
 			}
-			if (totalMessages != -1 && i >= totalMessages)
+			if (totalMessages != -1 && (i+1) >= totalMessages)
 				close = true;		
 		}
 
@@ -66,12 +66,12 @@ public class UDPServer {
 
 		// TO-DO: On receipt of first message, initialise the receive buffer
 		if (totalMessages == -1) {
-			totalMessages = (uint)((data.getData()[0] << 8) | (data.getData()[1]));
+			totalMessages = (int)((((int)data.getData()[0] << 8) & 0xFF00) | (0xFF & (data.getData()[1])));
 			receivedMessages = new boolean[totalMessages];
 		}
 
 		// TO-DO: Log receipt of the message
-		int msg = (int)((data.getData()[2] << 8) | (data.getData()[3]));
+		int msg = (int)((((int)data.getData()[2] << 8) & 0xFF00) | (0xFF & (data.getData()[3])));
 		receivedMessages[msg] = true;
 
 		return msg;
@@ -80,12 +80,12 @@ public class UDPServer {
 
 	public UDPServer(int rp) {
 
-		int timeOut = 5;
+		double timeOut = 0.3;
 
 		// TO-DO: Initialise UDP socket for receiving data
 		try {
 			recvSoc = new DatagramSocket(rp);
-			recvSoc.setSoTimeout(timeOut*1000);
+			recvSoc.setSoTimeout((int)(timeOut*1000));
 		} catch (SocketException e) {
 			System.out.println("SocketException: " + e);
 			System.exit(-1);

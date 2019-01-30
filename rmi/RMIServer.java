@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
-import com.sun.org.apache.xerces.internal.util.SecurityManager;
+//import com.sun.org.apache.xerces.internal.util.SecurityManager;
 
 import common.*;
 

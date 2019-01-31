@@ -19,6 +19,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 
 	private int totalMessages = -1;
 	private boolean[] receivedMessages;
+	int numRecieved = 0;
 
 	public RMIServer() throws RemoteException {
 	}
@@ -29,27 +30,31 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		if(totalMessages == -1){
 			receivedMessages = new boolean[msg.totalMessages];
 			totalMessages = msg.totalMessages;
+			numRecieved = 0;
 
 		}
+		numRecieved++;
 
 		// TO-DO: Log receipt of the message
 		receivedMessages[msg.messageNum] = true;
 		System.out.println(msg.messageNum);
 
+		
+
 
 		// TO-DO: If this is the last expected message, then identify
 		//        any missing messages
-
-		int numRecieved = 0;
-
-		System.out.println("Messages lost:");
-		for(int count = 0; count < receivedMessages.length; ++count) {
-			if (receivedMessages[count])
-				numRecieved++;
-			else
-				System.out.println(count);
+		if(numRecieved == totalMessages){
+			int droppedMsgs = 0;
+			System.out.println("Messages lost:");
+			for(int count = 0; count < receivedMessages.length; ++count) {
+				if (!receivedMessages[count])
+					System.out.println(count);
+					droppedMsgs++;
+			}
+			System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + ((double)droppedMsgs/(double)totalMessages)*100 + "% lost.");
+			totalMessages = -1;
 		}
-		System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + ((double)numRecieved/(double)totalMessages)*100 + "% found.");
 
 	}
 
@@ -69,16 +74,14 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		try{
 			String name = "testrun";
 			rmis = new RMIServer();
-			RMIServerI stub = (RMIServerI) UnicastRemoteObject.exportObject(rmis, 0);
-			Registry registry = LocateRegistry.getRegistry();
-			registry.bind(name, stub);
+			//RMIServerI stub = (RMIServerI) UnicastRemoteObject.exportObject(rmis, 0);
+			rebindServer(name, rmis);
 			System.err.println("Server ready.");
 		} catch (Exception e){
 			System.err.println("Server could not initialise. Error: " + e.toString());
 			e.printStackTrace();
 		}
 
-		// TO-DO: Bind to RMI registry
 
 	}
 
@@ -87,6 +90,12 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// TO-DO:
 		// Start / find the registry (hint use LocateRegistry.createRegistry(...)
 		// If we *know* the registry is running we could skip this (eg run rmiregistry in the start script)
+		try{
+			Registry registry = LocateRegistry.createRegistry(1099);
+			registry.rebind(serverURL, server);
+		}catch(Exception e){
+			System.out.println("Error binding server: " + e.toString());
+		}
 
 		// TO-DO:
 		// Now rebind the server to the registry (rebind replaces any existing servers bound to the serverURL)

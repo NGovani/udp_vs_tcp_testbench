@@ -3,3 +3,14 @@ rmi/*.class
 udp/*.class 
 common/*.class
 .vscode/launch.json
+udpserver.sh
+udpserver.bat
+udpclient.sh
+udpclient.bat
+rmiserver.sh
+rmiserver.bat
+rmiclient.sh
+rmiclient.bat
+build.bat
+Makefile
+

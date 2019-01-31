@@ -3,9 +3,9 @@
  */
 package rmi;
 
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+//import java.rmi.Naming;
+//import java.rmi.NotBoundException;
+//import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -15,7 +15,7 @@ public class RMIClient {
 
 	public static void main(String[] args) {
 
-		RMIServerI iRMIServer = null;
+		//RMIServerI iRMIServer = null;
 
 		// Check arguments for Server host and number of messages
 		if (args.length < 2){
@@ -23,7 +23,7 @@ public class RMIClient {
 			System.exit(-1);
 		}
 
-		String urlServer = new String("rmi://" + args[0] + "/RMIServer");
+	//	String urlServer = new String("rmi://" + args[0] + "/RMIServer");
 		int numMessages = Integer.parseInt(args[1]);
 
 		// TO-DO: Initialise Security Manager

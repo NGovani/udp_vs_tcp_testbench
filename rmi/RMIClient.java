@@ -33,8 +33,8 @@ public class RMIClient {
 
 		// TO-DO: Bind to RMIServer
 		try {
-			Registry registry = LocateRegistry.getRegistry(null);
-			RMIServerI stub = (RMIServerI) registry.lookup(args[0]);
+			Registry registry = LocateRegistry.getRegistry(args[0]);
+			RMIServerI stub = (RMIServerI) registry.lookup("testrun");
 
 			for(short tries = 0; tries < numMessages; ++tries) {
 				MessageInfo msg = new MessageInfo(numMessages, (int)tries);

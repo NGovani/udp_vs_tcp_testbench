@@ -38,7 +38,8 @@ public class UDPServer {
 				//System.out.println("Recieved message: " + i + " of " + totalMessages);
 			} catch(SocketTimeoutException e) {
 				System.out.println("SocketTimeOut: " + e);
-				++i;
+				if(totalMessages != -1)
+					 break;
 			} catch(IOException e) {
 				System.out.println("IOException: " + e);
 				System.exit(-1);
@@ -90,7 +91,7 @@ public class UDPServer {
 
 	public UDPServer(int rp) {
 
-		double timeOut = 10 ;
+		double timeOut = 4 ;
 
 		// TO-DO: Initialise UDP socket for receiving data
 		try {

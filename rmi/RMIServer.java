@@ -74,10 +74,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		try{
 			String name = "testrun";
 			rmis = new RMIServer();
-			//RMIServerI stub = (RMIServerI) UnicastRemoteObject.exportObject(rmis, 0);
 			rebindServer(name, rmis);
 			System.err.println("Server ready.");
-		} catch (Exception e){
+		} catch (RemoteException e){
 			System.err.println("Server could not initialise. Error: " + e.toString());
 			e.printStackTrace();
 		}
@@ -93,8 +92,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		try{
 			Registry registry = LocateRegistry.createRegistry(1099);
 			registry.rebind(serverURL, server);
-		}catch(Exception e){
-			System.out.println("Error binding server: " + e.toString());
+		}catch(RemoteException e){
+			System.out.println("Error binding server/creating registry: " + e.toString());
 		}
 
 		// TO-DO:

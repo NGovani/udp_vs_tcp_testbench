@@ -3,9 +3,10 @@
  */
 package rmi;
 
+import java.rmi.NotBoundException;
 //import java.rmi.Naming;
-//import java.rmi.NotBoundException;
-//import java.rmi.RemoteException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -41,10 +42,13 @@ public class RMIClient {
 				stub.receiveMessage(msg);
 				//try{Thread.sleep(0, 5);}catch(InterruptedException ex){}
 			}
-		} catch (Exception e) {
-			System.err.println("Client exception: " + e.toString()); 
+		} catch (RemoteException e) {
+			System.err.println("Error invoking remote procedure: " + e.toString()); 
 			e.printStackTrace(); 
 
+		} catch(NotBoundException e){
+			System.err.println("Registry lookup failed:  " + e.toString()); 
+			e.printStackTrace();
 		}
 
 		// TO-DO: Attempt to send messages the specified number of times

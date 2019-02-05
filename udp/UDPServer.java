@@ -35,7 +35,7 @@ public class UDPServer {
 			try {
 				recvSoc.receive(pac);
 				i = processMessage(pac);
-				System.out.println("Recieved message: " + i + " of " + (totalMessages-1));
+				//System.out.println("Recieved message: " + i + " of " + totalMessages);
 			} catch(SocketTimeoutException e) {
 				System.out.println("SocketTimeOut: " + e);
 				++i;
@@ -43,7 +43,7 @@ public class UDPServer {
 				System.out.println("IOException: " + e);
 				System.exit(-1);
 			}
-			if (totalMessages != -1 && (i+1) >= totalMessages)
+			if (totalMessages != -1 && (i) >= totalMessages)
 				close = true;		
 		}
 
@@ -54,7 +54,7 @@ public class UDPServer {
 			if (receivedMessages[count])
 				numRecieved++;
 			else
-				System.out.println(count);
+				System.out.println("Message: " + count);
 		}
 		System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + ((double)numRecieved/(double)totalMessages)*100 + "% found.");
 
@@ -76,7 +76,7 @@ public class UDPServer {
 
 		// TO-DO: Log receipt of the message
 			int msgNumber = msg.messageNum;
-			receivedMessages[msgNumber] = true;
+			receivedMessages[msgNumber-1] = true;
 
 			return msgNumber;
 		}
@@ -90,7 +90,7 @@ public class UDPServer {
 
 	public UDPServer(int rp) {
 
-		double timeOut = 10;
+		double timeOut = 10 ;
 
 		// TO-DO: Initialise UDP socket for receiving data
 		try {

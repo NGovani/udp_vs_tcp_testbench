@@ -66,7 +66,7 @@ public class UDPServer {
 
 		try{
 			byte[] temp = data.getData();
-			String msgInfo = new String(temp);
+			String msgInfo = new String(temp).trim();
 			MessageInfo msg = new MessageInfo(msgInfo);
 		// TO-DO: On receipt of first message, initialise the receive buffer
 			if (totalMessages == -1) {

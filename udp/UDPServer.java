@@ -9,7 +9,7 @@ import java.net.DatagramSocket;
 //import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-//import java.util.Arrays;
+import java.util.Arrays;
 
 import common.MessageInfo;
 
@@ -21,7 +21,7 @@ public class UDPServer {
 	private boolean close;
 
 	private void run() {
-		int				pacSize = 30;
+		int				pacSize = 11;
 		byte[]			pacData = new byte[pacSize];
 		DatagramPacket 	pac = new DatagramPacket(pacData, pacSize);
 
@@ -36,7 +36,7 @@ public class UDPServer {
 			try {
 				recvSoc.receive(pac);
 				i = processMessage(pac);
-				System.out.println(i);
+				System.out.println("Recieved message: " + i + " of " + (totalMessages-1));
 			} catch(SocketTimeoutException e) {
 				System.out.println("SocketTimeOut: " + e);
 				++i;
@@ -66,13 +66,11 @@ public class UDPServer {
 
 		try{
 			byte[] temp = data.getData();
-			String string = new String(temp);
-			System.err.println("string - " + string);
-			MessageInfo msg = new MessageInfo(string);
+			String msgInfo = new String(temp);
+			MessageInfo msg = new MessageInfo(msgInfo);
 		// TO-DO: On receipt of first message, initialise the receive buffer
 			if (totalMessages == -1) {
-			
-			//totalMessages = (int)((((int)data.getData()[0] << 8) & 0xFF00) | (0xFF & (data.getData()[1])));
+		
 				receivedMessages = new boolean[msg.totalMessages];
 				totalMessages = msg.totalMessages;
 			}
@@ -93,7 +91,7 @@ public class UDPServer {
 
 	public UDPServer(int rp) {
 
-		double timeOut = 0.3;
+		double timeOut = 10;
 
 		// TO-DO: Initialise UDP socket for receiving data
 		try {

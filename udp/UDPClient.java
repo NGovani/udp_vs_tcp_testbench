@@ -9,6 +9,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Timer;
 
 import common.MessageInfo;
 
@@ -39,7 +40,11 @@ public class UDPClient {
 
 		// TO-DO: Construct UDP client class and try to send messages
 		UDPClient client = new UDPClient();
+		long startTime = System.nanoTime();
 		client.testLoop(serverAddr, recvPort, countTo);
+		long endTime = System.nanoTime();
+
+		System.err.println("Time elapsed (ms): " + ((endTime - startTime)/1000000));
 	}
 
 	public UDPClient() {

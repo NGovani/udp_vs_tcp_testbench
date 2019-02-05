@@ -5,7 +5,6 @@ package rmi;
 
 import java.rmi.NotBoundException;
 //import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,42 +15,37 @@ public class RMIClient {
 
 	public static void main(String[] args) {
 
-		//RMIServerI iRMIServer = null;
-
 		// Check arguments for Server host and number of messages
 		if (args.length < 2){
 			System.out.println("Needs 2 arguments: ServerHostName/IPAddress, TotalMessageCount");
 			System.exit(-1);
 		}
 
-	//	String urlServer = new String("rmi://" + args[0] + "/RMIServer");
 		int numMessages = Integer.parseInt(args[1]);
 
-		// TO-DO: Initialise Security Manager
+		// Initialise Security Manager
 		if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
 
-		// TO-DO: Bind to RMIServer
+		// Bind to RMIServer
 		try {
 			Registry registry = LocateRegistry.getRegistry(args[0]);
-			RMIServerI stub = (RMIServerI) registry.lookup("testrun");
+			RMIServerI stub = (RMIServerI) registry.lookup("RMIServer");
+			long startTime = System.nanoTime();
 
 			for(short tries = 0; tries < numMessages; ++tries) {
 				MessageInfo msg = new MessageInfo(numMessages, (int)tries);
 				stub.receiveMessage(msg);
-				//try{Thread.sleep(0, 5);}catch(InterruptedException ex){}
 			}
+			long endTime = System.nanoTime();
+			System.err.println("Time elapsed (ms): " + ((endTime - startTime)/1000000));
 		} catch (RemoteException e) {
 			System.err.println("Error invoking remote procedure: " + e.toString()); 
 			e.printStackTrace(); 
-
 		} catch(NotBoundException e){
 			System.err.println("Registry lookup failed:  " + e.toString()); 
 			e.printStackTrace();
 		}
-
-		// TO-DO: Attempt to send messages the specified number of times
-
 	}
 }

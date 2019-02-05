@@ -21,7 +21,7 @@ public class UDPServer {
 	private boolean close;
 
 	private void run() {
-		int				pacSize = 4;
+		int				pacSize = 30;
 		byte[]			pacData = new byte[pacSize];
 		DatagramPacket 	pac = new DatagramPacket(pacData, pacSize);
 
@@ -64,17 +64,28 @@ public class UDPServer {
 
 	public int processMessage(DatagramPacket data) {
 
+		try{
+			String temp = data.getData().toString();
+			MessageInfo msg = new MessageInfo(temp);
 		// TO-DO: On receipt of first message, initialise the receive buffer
-		if (totalMessages == -1) {
-			totalMessages = (int)((((int)data.getData()[0] << 8) & 0xFF00) | (0xFF & (data.getData()[1])));
-			receivedMessages = new boolean[totalMessages];
-		}
+			if (totalMessages == -1) {
+			
+			//totalMessages = (int)((((int)data.getData()[0] << 8) & 0xFF00) | (0xFF & (data.getData()[1])));
+				receivedMessages = new boolean[msg.totalMessages];
+				totalMessages = msg.totalMessages;
+			}
 
 		// TO-DO: Log receipt of the message
-		int msg = (int)((((int)data.getData()[2] << 8) & 0xFF00) | (0xFF & (data.getData()[3])));
-		receivedMessages[msg] = true;
+			int msgNumber = msg.messageNum;
+			receivedMessages[msgNumber] = true;
 
-		return msg;
+			return msgNumber;
+		}
+		catch(Exception e){
+			System.err.println("Client exception: " + e.toString()); 
+			e.printStackTrace(); 
+			return 0;
+		}
 	}
 
 

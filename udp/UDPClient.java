@@ -63,6 +63,7 @@ public class UDPClient {
 			*/
 			MessageInfo msg = new MessageInfo(countTo, tries);
 			send(msg.toString().getBytes(), serverAddr, recvPort);
+			System.err.println(msg.toString().getBytes());
 			//try{Thread.sleep(0, 5);}catch(InterruptedException ex){}
 		}
 	}

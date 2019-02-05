@@ -65,8 +65,10 @@ public class UDPServer {
 	public int processMessage(DatagramPacket data) {
 
 		try{
-			String temp = data.getData().toString();
-			MessageInfo msg = new MessageInfo(temp);
+			byte[] temp = data.getData();
+			String string = new String(temp);
+			System.err.println("string - " + string);
+			MessageInfo msg = new MessageInfo(string);
 		// TO-DO: On receipt of first message, initialise the receive buffer
 			if (totalMessages == -1) {
 			

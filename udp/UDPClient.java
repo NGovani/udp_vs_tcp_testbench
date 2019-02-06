@@ -27,7 +27,6 @@ public class UDPClient {
 			System.err.println("Arguments required: server name/IP, recv port, message count");
 			System.exit(-1);
 		}
-
 		try {
 			serverAddr = InetAddress.getByName(args[0]);
 		} catch (UnknownHostException e) {
@@ -37,8 +36,7 @@ public class UDPClient {
 		recvPort = Integer.parseInt(args[1]);
 		countTo = Integer.parseInt(args[2]);
 
-
-		// TO-DO: Construct UDP client class and try to send messages
+		//Construct UDP client class and try to send messages
 		UDPClient client = new UDPClient();
 		long startTime = System.nanoTime();
 		client.testLoop(serverAddr, recvPort, countTo);
@@ -48,7 +46,7 @@ public class UDPClient {
 	}
 
 	public UDPClient() {
-		// TO-DO: Initialise the UDP socket for sending data
+		//Initialise the UDP socket for sending data
 		try {
 			sendSoc = new DatagramSocket();
 		} catch (SocketException e) {
@@ -58,7 +56,7 @@ public class UDPClient {
 	}
 
 	private void testLoop(InetAddress serverAddr, int recvPort, int countTo) {
-		// TO-DO: Send the messages to the server
+		//Send the messages to the server
 		for(short tries = 0; tries < countTo; ++tries) {
 			MessageInfo msg = new MessageInfo(countTo, tries+1);
 			send(msg.toString().getBytes(), serverAddr, recvPort);
@@ -69,7 +67,7 @@ public class UDPClient {
 		int					payloadSize;
 		DatagramPacket		pkt;
 
-		// TO-DO: build the datagram packet and send it to the server
+		// Build the datagram packet and send it to the server
 		try {
 			payloadSize = payload.length;
 			pkt = new DatagramPacket(payload, payloadSize, destAddr, destPort);

@@ -36,17 +36,15 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		numRecieved++;
 
 		receivedMessages[msg.messageNum] = true;
-		System.out.println(msg.messageNum);
 		
 		if(numRecieved == totalMessages){
 			int droppedMsgs = 0;
-			System.out.println("Messages lost:");
 			for(int count = 0; count < receivedMessages.length; ++count) {
 				if (!receivedMessages[count])
-					System.out.println(count);
+					System.out.println("Lost Message: " + count + 1);
 					droppedMsgs++;
 			}
-			System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + ((double)droppedMsgs/(double)totalMessages)*100 + "% lost.");
+			System.out.println("Recieved " + numRecieved + " out of " + totalMessages + " : " + (1-((double)droppedMsgs/(double)totalMessages))*100 + "% lost.");
 			totalMessages = -1;
 		}
 	}
@@ -60,7 +58,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		}
 		// Instantiate the server class
 		try{
-			String name = "testrun";
+			String name = "RMIServer";
 			rmis = new RMIServer();
 			rebindServer(name, rmis);
 			System.err.println("Server ready.");
